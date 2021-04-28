@@ -48,7 +48,7 @@ namespace Microwave.Test.Unit
         {
             uut.StartCooking(50, 60);
 
-            timer.TimeRemaining.Returns(115);
+            timer.TimeRemaining.Returns(115*1000); // Ganger med 1000 for at få det i ms, da vores timer regner ud i ms og ikke sekunder
             timer.TimerTick += Raise.EventWith(this, EventArgs.Empty);
 
             display.Received().ShowTime(1, 55);
