@@ -1,12 +1,12 @@
-using System;
-using System.IO;
-using System.Threading;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Controllers;
 using Microwave.Classes.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
+using System;
+using System.Threading;
+using NuGet.Frameworks;
+using NUnit.Framework.Internal.Execution;
 using Timer = Microwave.Classes.Boundary.Timer;
 
 namespace Microwave.Test.Integration
@@ -83,7 +83,109 @@ namespace Microwave.Test.Integration
 
             Assert.That(() => _uut.StartCooking(50,1000), Throws.TypeOf<ApplicationException>());
         }
-        
+
+        [Test]
+
+        public void StartCooking_PowerTubeTurnOffAfterTimeIsUp_OutputIsCorrect()
+        {
+            // Arrange
+
+            _uut.StartCooking(50,1000);
+
+            Thread.Sleep(1100);
+
+            // Assert
+
+            _output.Received().OutputLine($"PowerTube turned off");
+        }
+
+        [Test]
+
+        public void StartCooking_PowerTubeTurnOffAfterStopIsCalled_OutputIsCorrect()
+        {
+            // Arrange
+
+            _uut.StartCooking(50, 1000);
+
+            _uut.Stop();
+
+            // Assert
+
+            _output.Received().OutputLine($"PowerTube turned off");
+        }
+
+        [TestCase(-1000)]
+        [TestCase(1000)]
+        [TestCase(0)]
+
+        public void StartCooking_TimerStart_TimeRemainingIsCorrect(int time)
+        {
+            // Arrange
+
+            _uut.StartCooking(50,time);
+
+            // Assert
+
+            Assert.That(() => _timer.TimeRemaining, Is.EqualTo(time));
+
+        }
+
+        [Test]
+
+        public void StartCooking_TimerStopCalled_IsCalledCorrectly()
+        { 
+            // Arrange
+
+            _uut.StartCooking(50,60000);
+
+            _uut.Stop();
+
+            Thread.Sleep(2000);
+
+            // Assert
+
+            
+            _output.DidNotReceive().OutputLine(Arg.Is<string>(str =>
+                str.Contains("00:59")));
+
+        }
+
+        [Test]
+
+        public void StartCooking_TimerEventOnTimerEvent_OutputIsCorrect()
+        {
+            // Arrange
+
+            _uut.StartCooking(50, 2000);
+
+            Thread.Sleep(2000);
+
+            // Assert
+
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("00:01")));
+
+        }
+
+        [Test]
+
+        public void StartCooking_TimerEventOnTimerExpired_OutputIsCorrect()
+        {
+            // Arrange
+
+            _uut.StartCooking(50,1000);
+
+            Thread.Sleep(2000);
+
+            // Assert
+
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("off")));
+
+        }
+
+
+
 
     }
 }

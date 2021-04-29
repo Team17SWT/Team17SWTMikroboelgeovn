@@ -21,7 +21,7 @@ namespace Microwave.Classes.Boundary
             timer.AutoReset = true;  // Repeatable timer
         }
 
-
+        // Der tages ikke højde for negativt input - muligt fejl?
         public void Start(int time)
         {
             TimeRemaining = time;
