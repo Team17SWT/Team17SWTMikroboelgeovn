@@ -7,7 +7,7 @@ namespace Microwave.Classes.Controllers
     {
         // Since there is a 2-way association, this cannot be set until the UI object has been created
         // It also demonstrates property dependency injection
-        public IUserInterface UI { set; private get; }
+        public IUserInterface UI { set; get; } // HJÆLP
 
         private bool isCooking = false;
 
@@ -36,6 +36,8 @@ namespace Microwave.Classes.Controllers
             timer.Expired += new EventHandler(OnTimerExpired);
             timer.TimerTick += new EventHandler(OnTimerTick);
         }
+
+
 
         public void StartCooking(int power, int time)
         {
