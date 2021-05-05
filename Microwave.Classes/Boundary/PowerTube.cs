@@ -18,7 +18,7 @@ namespace Microwave.Classes.Boundary
         {
             if (power < 50 || 700 < power) // ÆNDRET FRA 100 TIL 700 (PROCENT TIL WATT) OG FRA 1 TIL 50 (USE CASE)
             {
-                throw new ArgumentOutOfRangeException("power", power, "Must be between 1 and 700 (incl.)"); //ændret 100 til 700
+                throw new ArgumentOutOfRangeException("power", power, "Must be between 50 and 700 (incl.)"); //ændret 100 til 700 og 1 til 50
             }
 
             if (IsOn)

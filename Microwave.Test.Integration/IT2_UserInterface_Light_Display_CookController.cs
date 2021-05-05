@@ -31,7 +31,7 @@ namespace Microwave.Test.Integration
         public void Setup()
         {
             _output = Substitute.For<IOutput>();
-            _timer = Substitute.For<ITimer>(); // HJÆLP
+            _timer = Substitute.For<ITimer>();
             _display = new Display(_output);
             _powerTube = new PowerTube(_output);
             _cookController = new CookController(_timer, _display, _powerTube, _uut);
@@ -120,16 +120,23 @@ namespace Microwave.Test.Integration
                 str.Contains("Light is turned off")));
         }
 
-        [Test]
-        public void OnPowerPressedFromReady_DisplayShowPower_OutputShowsPower() 
+        [TestCase(1,50)]
+        [TestCase(14,700)]
+        public void OnPowerPressedFromReady_DisplayShowPower_OutputShowsPower(int timepressed, int watt) 
         {
             //Arrange
-            _uut.OnPowerPressed(this, EventArgs.Empty);
+            for (int i = 0; i < timepressed; i++)
+            {
+                _uut.OnPowerPressed(this, EventArgs.Empty);
+            }
+            
 
             //Assert
             _output.Received().OutputLine(Arg.Is<string>(str =>
-                str.Contains("Display shows: 50 W")));
+                str.Contains($"Display shows: {watt} W")));
         }
+
+
 
         [Test]
         public void OnTimePressedFromSetPower_DisplayShowTime_OutputShowsTime()

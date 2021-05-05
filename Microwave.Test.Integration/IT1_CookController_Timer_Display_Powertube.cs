@@ -65,7 +65,6 @@ namespace Microwave.Test.Integration
         public void StartCooking_PowerTubeTurnOnOutOfRange_NotAllowed(int power)
         {
 
-
             // Arrange + Assert
 
             Assert.That(() => _uut.StartCooking(power,2000), Throws.TypeOf<ArgumentOutOfRangeException>());

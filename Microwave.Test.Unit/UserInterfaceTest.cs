@@ -166,7 +166,7 @@ namespace Microwave.Test.Unit
             // Now in SetTime
             startCancelButton.Pressed += Raise.EventWith(this, EventArgs.Empty);
 
-            cooker.Received(1).StartCooking(50, 60);
+            cooker.Received(1).StartCooking(50, 60*1000); // GANGER MED 1000 SÅ DET PASSER MED INTEGRATIONSTEST RETTELSER (det skal om i ms)
         }
 
         [Test]
@@ -207,7 +207,7 @@ namespace Microwave.Test.Unit
             // Should call with correct values
             startCancelButton.Pressed += Raise.EventWith(this, EventArgs.Empty);
 
-            cooker.Received(1).StartCooking(100, 120);
+            cooker.Received(1).StartCooking(100, 120*1000); // GANGER MED 1000 SÅ DET PASSER MED INTEGRATIONSTEST RETTELSER (det skal om i ms)
         }
 
         [Test]
@@ -224,7 +224,7 @@ namespace Microwave.Test.Unit
             // Should call with correct values
             startCancelButton.Pressed += Raise.EventWith(this, EventArgs.Empty);
 
-            cooker.Received(1).StartCooking(700, 60);
+            cooker.Received(1).StartCooking(700, 60*1000); // GANGER MED 1000 SÅ DET PASSER MED INTEGRATIONSTEST RETTELSER (det skal om i ms)
 
         }
 
