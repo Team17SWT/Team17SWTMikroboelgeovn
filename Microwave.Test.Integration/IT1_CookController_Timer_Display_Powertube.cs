@@ -43,9 +43,9 @@ namespace Microwave.Test.Integration
                 str.Contains(message)));
         }
 
-        [TestCase(1)]
-        [TestCase(700)]
         [TestCase(50)]
+        [TestCase(700)]
+        [TestCase(100)]
 
         public void StartCooking_PowerTubeTurnOn_DisplayShowsTurnOn(int power)
         {
@@ -58,7 +58,7 @@ namespace Microwave.Test.Integration
             _output.Received().OutputLine($"PowerTube works with { power }");
         }
 
-        [TestCase(0)]
+        [TestCase(49)]
         [TestCase(701)]
         [TestCase(-50)]
 

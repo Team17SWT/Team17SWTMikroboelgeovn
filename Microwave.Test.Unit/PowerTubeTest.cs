@@ -19,8 +19,8 @@ namespace Microwave.Test.Unit
             uut = new PowerTube(output);
         }
 
-        [TestCase(1)]
-        [TestCase(50)]
+        [TestCase(50)] // ÆNDRET FRA 1 TIL 50
+        [TestCase(100)]
         [TestCase(700)] // ÆNDRET TIL 700 FRA 100
         public void TurnOn_WasOffCorrectPower_CorrectOutput(int power)
         {
@@ -30,7 +30,7 @@ namespace Microwave.Test.Unit
 
         [TestCase(-5)]
         [TestCase(-1)]
-        [TestCase(0)]
+        [TestCase(49)] // ÆNDRET FRA 0 TIL 49
         [TestCase(701)] // ÆNDRET TIL WATT
         [TestCase(750)]
         public void TurnOn_WasOffOutOfRangePower_ThrowsException(int power)
