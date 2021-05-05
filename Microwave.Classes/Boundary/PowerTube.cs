@@ -16,9 +16,9 @@ namespace Microwave.Classes.Boundary
 
         public void TurnOn(int power)
         {
-            if (power < 1 || 100 < power)
+            if (power < 1 || 700 < power) // ÆNDRET FRA 100 TIL 700 (PROCENT TIL WATT)
             {
-                throw new ArgumentOutOfRangeException("power", power, "Must be between 1 and 100 (incl.)");
+                throw new ArgumentOutOfRangeException("power", power, "Must be between 1 and 700 (incl.)"); //ændret 100 til 700
             }
 
             if (IsOn)

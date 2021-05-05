@@ -44,7 +44,7 @@ namespace Microwave.Test.Integration
         }
 
         [TestCase(1)]
-        [TestCase(100)]
+        [TestCase(700)]
         [TestCase(50)]
 
         public void StartCooking_PowerTubeTurnOn_DisplayShowsTurnOn(int power)
@@ -59,7 +59,7 @@ namespace Microwave.Test.Integration
         }
 
         [TestCase(0)]
-        [TestCase(101)]
+        [TestCase(701)]
         [TestCase(-50)]
 
         public void StartCooking_PowerTubeTurnOnOutOfRange_NotAllowed(int power)

@@ -16,7 +16,7 @@ namespace Microwave.Test.Integration
     public class IT2_UserInterface_Light_Display_CookController
     {
         private IUserInterface _uut;
-        private ICookController _cookController;
+        private CookController _cookController;
         private ITimer _timer;
         private ILight _light;
         private IDisplay _display;
@@ -32,7 +32,6 @@ namespace Microwave.Test.Integration
         {
             _output = Substitute.For<IOutput>();
             _timer = Substitute.For<ITimer>(); // HJÆLP
-            //_timer = new Timer();
             _display = new Display(_output);
             _powerTube = new PowerTube(_output);
             _cookController = new CookController(_timer, _display, _powerTube, _uut);
