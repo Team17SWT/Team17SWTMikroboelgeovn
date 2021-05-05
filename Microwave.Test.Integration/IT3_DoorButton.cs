@@ -30,7 +30,7 @@ namespace Microwave.Test.Integration
         public void Setup()
         {
             _output = Substitute.For<IOutput>();
-            _timer = Substitute.For<Timer>();
+            _timer = Substitute.For<ITimer>();
             _light = new Light(_output);
             _powerButton = new Button();
             _startCancelButton = new Button();
@@ -126,6 +126,81 @@ namespace Microwave.Test.Integration
 
             _output.Received().OutputLine(Arg.Is<string>(str =>
                 str.Contains($"{output}:00")));
+        }
+
+        [Test]
+
+        public void StartCancelButton_ButtonPressedWhenNotCooking_OutputIsCorrect()
+        {
+            // Arrange
+
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+
+            _timer.Expired += Raise.Event();
+
+            // Assert
+
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Light") &&
+                str.Contains("on")));
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display") &&
+                str.Contains("01:00")));
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("PowerTube works") &&
+                str.Contains("50")));
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display cleared")));
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Light") &&
+                str.Contains("off")));
+        }
+
+        [Test]
+
+        public void StartCancelButton_ButtonPressedWhenCooking_OutputIsCorrect()
+        {
+            // Arrange
+
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+
+            _startCancelButton.Press();
+
+            // Assert
+
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("PowerTube") &&
+                str.Contains("off")));
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Light") &&
+                str.Contains("off")));
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display cleared")));
+        }
+
+        [Test]
+
+        public void Door_DoorOpenWhenCooking_OutputIsCorrect()
+        {
+            // Arrange
+
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+
+            _door.Open();
+
+            // Assert
+
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("PowerTube") &&
+                str.Contains("off")));
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display cleared")));
         }
 
 
