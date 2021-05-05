@@ -51,11 +51,11 @@ namespace Microwave.Test.Integration
                 _light,
                 _cookController);
 
-            _cookController.UI = _uut; // HER SKAL UI SÆTTES TIL VORES _UUT. HJÆLP
+            _cookController.UI = _uut; // HER SKAL UI SÆTTES TIL VORES _UUT. 
         }
 
         [Test]
-        public void OnDoorOpenedFromReady_LightTurnOn_DisplayShowsOn()
+        public void OnDoorOpenedFromReady_LightTurnOn_OutputShowsOn()
         {
             //Arrange
             _uut.OnDoorOpened(this, EventArgs.Empty);
@@ -66,7 +66,7 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void OnDoorClosedFromDoorIsOpen_LightTurnOff_DisplayShowsOff()
+        public void OnDoorClosedFromDoorIsOpen_LightTurnOff_OutputShowsOff()
         {
             //Arrange
             _uut.OnDoorOpened(this, EventArgs.Empty);
@@ -78,7 +78,7 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void OnStartCancelPressedFromSetTime_LightTurnOn_DisplayShowsOff()
+        public void OnStartCancelPressedFromSetTime_LightTurnOn_OutputShowsOff()
         {
             //Arrange
             _uut.OnPowerPressed(this, EventArgs.Empty);
@@ -91,16 +91,174 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void CookingDone_LightTurnOff_DisplayShowsOff() // HJÆLP
+        public void CookingDone_LightTurnOff_OutputShowsOff() 
         {
+            //Arrange
             _uut.OnPowerPressed(this, EventArgs.Empty);
             _uut.OnTimePressed(this, EventArgs.Empty);
             _uut.OnStartCancelPressed(this, EventArgs.Empty);
 
             _timer.Expired += Raise.Event();
             
+            //Assert
             _output.Received().OutputLine(Arg.Is<string>(str =>
                 str.Contains("Light is turned off")));
+        }
+
+        [Test]
+        public void OnStartCancelPressedFromCooking_LightTurnOff_OutputShowsOff() 
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Light is turned off")));
+        }
+
+        [Test]
+        public void OnPowerPressedFromReady_DisplayShowPower_OutputShowsPower() 
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display shows: 50 W")));
+        }
+
+        [Test]
+        public void OnTimePressedFromSetPower_DisplayShowTime_OutputShowsTime()
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display shows: 01:00")));
+        }
+
+        [Test]
+        public void CookingDone_DisplayClear_OutputShowsCleared()
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+
+            _timer.Expired += Raise.Event();
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display cleared")));
+        }
+
+        [Test]
+        public void OnDoorOpenedFromCooking_DisplayClear_OutputShowsCleared()
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+            _uut.OnDoorOpened(this, EventArgs.Empty);
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display cleared")));
+        }
+
+        [Test]
+        public void OnStartCancelPressedCalledFromCooking_DisplayClear_OutputShowsCleared()
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display cleared")));
+        }
+
+        [Test]
+        public void OnStartCancelPressedCalledFromSetTime_CookControllerStartsCooking_OutputShowsRightResults()
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("50 W")));
+
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("02:00")));
+
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("01:00")));
+        }
+
+        [Test]
+        public void OnTimerExpiredFromCooking_UICookingIsDone_OutputShowsRightResults()
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+
+            _timer.Expired += Raise.Event();
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("cleared")));
+
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Light is turned off")));
+
+        }
+
+        [Test]
+        public void OnDoorOpenedFromCooking_CookControllerStop_OutputShowsRightResults()
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+
+            _uut.OnDoorOpened(this, EventArgs.Empty);
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("PowerTube turned off")));
+
+        }
+
+        [Test]
+        public void OnStartCancelPressedFromCooking_CookControllerStop_OutputShowsRightResults()
+        {
+            //Arrange
+            _uut.OnPowerPressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnTimePressed(this, EventArgs.Empty);
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+
+            _uut.OnStartCancelPressed(this, EventArgs.Empty);
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("PowerTube turned off")));
+
         }
     }
 }
