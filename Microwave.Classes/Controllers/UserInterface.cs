@@ -94,8 +94,8 @@ namespace Microwave.Classes.Controllers
                 case States.COOKING:
                     ResetValues();
                     myCooker.Stop();
+                    myDisplay.Clear(); // Har lige ændret rækkefølge så det passer med sekvensdiagram
                     myLight.TurnOff();
-                    myDisplay.Clear();
                     myState = States.READY;
                     break;
             }
